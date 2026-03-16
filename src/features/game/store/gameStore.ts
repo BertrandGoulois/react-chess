@@ -7,7 +7,7 @@ interface GameState {
 }
 
 interface GameActions {
-    selectSquare: (square: string) => void;
+    selectSquare: (square: string | null) => void;
     makeMove: (to: string) => void;
     resetGame: () => void;
 }
