@@ -37,4 +37,11 @@ describe('gameStore', () => {
         expect(ranks[4]).toBe('4P3');
         expect(selectedSquare).toBeNull();
     });
+
+    it('should not update state on illegal move', () => {
+        useGameStore.getState().selectSquare('e2');
+        useGameStore.getState().makeMove('e5');
+        const { game } = useGameStore.getState();
+        expect(game.fen()).toBe('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+    });
 });

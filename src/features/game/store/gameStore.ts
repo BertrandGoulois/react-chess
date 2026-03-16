@@ -22,9 +22,12 @@ export const useGameStore = create<GameState & GameActions>()((set) => ({
     selectSquare: (square) => set({ selectedSquare: square }),
     resetGame: () => set(getInitialState()),
     makeMove: (to) => set((state) => {
-        const game = new Chess(state.game.fen());
-        const move = game.move({ from: state.selectedSquare!, to });
-        if (!move) return state;
-        return { game, selectedSquare: null };
+        try {
+            const game = new Chess(state.game.fen());
+            game.move({ from: state.selectedSquare!, to });
+            return { game, selectedSquare: null };
+        } catch {
+            return state;
+        }
     }),
 }));
