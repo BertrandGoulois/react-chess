@@ -6,3 +6,7 @@ export const boardStyle = style({
   width: '480px',
   height: '480px',
 });
+
+export const flippedBoardStyle = style({
+  transform: 'rotate(180deg)',
+});

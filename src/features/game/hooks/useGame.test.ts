@@ -1,63 +1,77 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
-import { useGameStore } from '../store/gameStore';
-import { useGame } from './useGame';
+import { describe, it, expect, beforeEach } from "vitest";
+import { renderHook, act } from "@testing-library/react";
+import { useGameStore } from "../store/gameStore";
+import { useGame } from "./useGame";
 
-describe('useGame', () => {
-    beforeEach(() => {
-        useGameStore.getState().resetGame();
-    });
+describe("useGame", () => {
+  beforeEach(() => {
+    useGameStore.getState().resetGame();
+  });
 
-    it('should select a square on first click', () => {
-        const { result } = renderHook(() => useGame());
-        act(() => result.current.handleSquareClick('e2'));
-        expect(useGameStore.getState().selectedSquare).toBe('e2');
-    });
+  it("should select a square on first click", () => {
+    const { result } = renderHook(() => useGame());
+    act(() => result.current.handleSquareClick("e2"));
+    expect(useGameStore.getState().selectedSquare).toBe("e2");
+  });
 
-    it('should make a move on second click', () => {
-        const { result } = renderHook(() => useGame());
-        act(() => result.current.handleSquareClick('e2'));
-        act(() => result.current.handleSquareClick('e4'));
-        const { selectedSquare, game } = useGameStore.getState();
-        const ranks = game.fen().split(' ')[0].split('/');
-        expect(ranks[4]).toBe('4P3');
-        expect(selectedSquare).toBeNull();
-    });
+  it("should make a move on second click", () => {
+    const { result } = renderHook(() => useGame());
+    act(() => result.current.handleSquareClick("e2"));
+    act(() => result.current.handleSquareClick("e4"));
+    const { selectedSquare, game } = useGameStore.getState();
+    const ranks = game.fen().split(" ")[0].split("/");
+    expect(ranks[4]).toBe("4P3");
+    expect(selectedSquare).toBeNull();
+  });
 
-    it('should deselect on second click on same square', () => {
-        const { result } = renderHook(() => useGame());
-        act(() => result.current.handleSquareClick('e2'));
-        act(() => result.current.handleSquareClick('e2'));
-        expect(useGameStore.getState().selectedSquare).toBeNull();
-    });
+  it("should deselect on second click on same square", () => {
+    const { result } = renderHook(() => useGame());
+    act(() => result.current.handleSquareClick("e2"));
+    act(() => result.current.handleSquareClick("e2"));
+    expect(useGameStore.getState().selectedSquare).toBeNull();
+  });
 
-    it('should change selection on second click on own piece', () => {
-        const { result } = renderHook(() => useGame());
-        act(() => result.current.handleSquareClick('e2'));
-        act(() => result.current.handleSquareClick('d2'));
-        expect(useGameStore.getState().selectedSquare).toBe('d2');
-    });
+  it("should change selection on second click on own piece", () => {
+    const { result } = renderHook(() => useGame());
+    act(() => result.current.handleSquareClick("e2"));
+    act(() => result.current.handleSquareClick("d2"));
+    expect(useGameStore.getState().selectedSquare).toBe("d2");
+  });
 
-    it('should not select an empty square', () => {
-        const { result } = renderHook(() => useGame());
-        act(() => result.current.handleSquareClick('e4'));
-        expect(useGameStore.getState().selectedSquare).toBeNull();
-    });
+  it("should not select an empty square", () => {
+    const { result } = renderHook(() => useGame());
+    act(() => result.current.handleSquareClick("e4"));
+    expect(useGameStore.getState().selectedSquare).toBeNull();
+  });
 
-    it('should not select an opponent piece', () => {
-        const { result } = renderHook(() => useGame());
-        act(() => result.current.handleSquareClick('e7'));
-        expect(useGameStore.getState().selectedSquare).toBeNull();
-    });
+  it("should not select an opponent piece", () => {
+    const { result } = renderHook(() => useGame());
+    act(() => result.current.handleSquareClick("e7"));
+    expect(useGameStore.getState().selectedSquare).toBeNull();
+  });
 
-    it('should select legal squares', () => {
-        const { result } = renderHook(() => useGame());
-        act(() => result.current.handleSquareClick('b1'));
-        expect(result.current.legalSquares).toEqual(expect.arrayContaining(['a3', 'c3']));
-    });
-    
-    it('should return empty legal squares when no piece is selected', () => {
+  it("should select legal squares", () => {
+    const { result } = renderHook(() => useGame());
+    act(() => result.current.handleSquareClick("b1"));
+    expect(result.current.legalSquares).toEqual(
+      expect.arrayContaining(["a3", "c3"]),
+    );
+  });
+
+  it("should return empty legal squares when no piece is selected", () => {
     const { result } = renderHook(() => useGame());
     expect(result.current.legalSquares).toEqual([]);
-});
+  });
+
+  it("should have isFlipped equal to false before first move", () => {
+    const { result } = renderHook(() => useGame());
+    expect(result.current.isFlipped).toBe(false);
+  });
+
+  it("should have isFlipped equal to true after first move", () => {
+    const { result } = renderHook(() => useGame());
+    act(() => result.current.handleSquareClick("b1"));
+    act(() => result.current.handleSquareClick("a3"));
+    expect(result.current.isFlipped).toBe(true);
+  });
 });

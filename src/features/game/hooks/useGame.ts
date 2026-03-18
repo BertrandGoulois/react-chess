@@ -7,6 +7,8 @@ export const useGame = () => {
         ? game.moves({ square: selectedSquare as any, verbose: true }).map(m => m.to)
         : []
 
+    const isFlipped = game.turn() === 'b';
+
     const handleSquareClick = (square: string) => {
         if (!selectedSquare) {
             const piece = game.get(square as any);
@@ -30,7 +32,8 @@ export const useGame = () => {
         }
 
         makeMove(square);
+        
     };
 
-    return { game, selectedSquare, handleSquareClick, legalSquares };
+    return { game, selectedSquare, handleSquareClick, legalSquares, isFlipped };
 };

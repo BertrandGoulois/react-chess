@@ -9,10 +9,13 @@ const ranks = [8, 7, 6, 5, 4, 3, 2, 1];
 const squares = ranks.flatMap((rank) => files.map((file) => `${file}${rank}`));
 
 export const Board = () => {
-  const { game, handleSquareClick, selectedSquare, legalSquares } = useGame();
+  const { game, handleSquareClick, selectedSquare, legalSquares, isFlipped } =
+    useGame();
 
   return (
-    <div className={styles.boardStyle}>
+    <div
+      className={`${styles.boardStyle} ${isFlipped ? styles.flippedBoardStyle : ""}`}
+    >
       {squares.map((square, index) => {
         const piece = game.get(square as any);
         const fileIndex = index % 8;
@@ -28,7 +31,11 @@ export const Board = () => {
             onClick={() => handleSquareClick(square)}
           >
             {piece && (
-              <Piece type={piece.type.toUpperCase()} color={piece.color} />
+              <Piece
+                type={piece.type.toUpperCase()}
+                color={piece.color}
+                isFlipped={isFlipped}
+              />
             )}
           </Square>
         );
