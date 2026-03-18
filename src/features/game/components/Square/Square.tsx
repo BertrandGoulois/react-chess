@@ -7,6 +7,8 @@ interface SquareProps {
   onClick: () => void;
   children?: React.ReactNode;
   isLegal?: boolean;
+  onDragOver: (e: React.DragEvent) => void;
+  onDrop: () => void;
 }
 
 export const Square = ({
@@ -16,6 +18,8 @@ export const Square = ({
   onClick,
   children,
   isLegal,
+  onDragOver,
+  onDrop,
 }: SquareProps) => {
   return (
     <div
@@ -24,6 +28,8 @@ export const Square = ({
       className={`${styles.baseSquareStyle} ${styles.squareColorVariants[isLight ? "light" : "dark"]} 
       ${isSelected ? styles.selectedSquareStyle : isLegal ? styles.legalSquareStyle : ""}`}
       onClick={onClick}
+      onDragOver={onDragOver}
+      onDrop={onDrop}
     >
       {children}
     </div>
