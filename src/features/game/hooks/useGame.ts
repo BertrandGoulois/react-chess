@@ -1,29 +1,36 @@
 import { useGameStore } from '../store/gameStore';
 
 export const useGame = () => {
-  const { game, selectedSquare, selectSquare, makeMove } = useGameStore();
+    const { game, selectedSquare, selectSquare, makeMove } = useGameStore();
 
-  const handleSquareClick = (square: string) => {
-    if (!selectedSquare) {
-      selectSquare(square);
-      return;
-    }
+    const legalSquares: string[] = selectedSquare
+        ? game.moves({ square: selectedSquare as any, verbose: true }).map(m => m.to)
+        : []
 
-    if (square === selectedSquare) {
-      selectSquare(null);
-      return;
-    }
+    const handleSquareClick = (square: string) => {
+        if (!selectedSquare) {
+            const piece = game.get(square as any);
+            const isOwnPiece = piece && piece.color === game.turn();
+            if (!isOwnPiece) return;
+            selectSquare(square);
+            return;
+        }
 
-    const piece = game.get(square as any);
-    const isOwnPiece = piece && piece.color === game.turn();
+        if (square === selectedSquare) {
+            selectSquare(null);
+            return;
+        }
 
-    if (isOwnPiece) {
-      selectSquare(square);
-      return;
-    }
+        const piece = game.get(square as any);
+        const isOwnPiece = piece && piece.color === game.turn();
 
-    makeMove(square);
-  };
+        if (isOwnPiece) {
+            selectSquare(square);
+            return;
+        }
 
-  return { game, selectedSquare, handleSquareClick };
+        makeMove(square);
+    };
+
+    return { game, selectedSquare, handleSquareClick, legalSquares };
 };

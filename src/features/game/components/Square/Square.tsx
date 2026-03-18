@@ -1,22 +1,31 @@
-import * as styles from './Square.css';
+import * as styles from "./Square.css";
 
 interface SquareProps {
-    square: string;
-    isSelected: boolean;
-    isLight: boolean;
-    onClick: () => void;
-    children?: React.ReactNode;
+  square: string;
+  isSelected: boolean;
+  isLight: boolean;
+  onClick: () => void;
+  children?: React.ReactNode;
+  isLegal?: boolean;
 }
 
-export const Square = ({ square: _square, isSelected, isLight, onClick, children }: SquareProps) => {
-    return (
-        <div
-            data-testid="square"
-            data-selected={isSelected}
-            className={`${styles.baseSquareStyle} ${styles.squareColorVariants[isLight ? 'light' : 'dark']}`}
-            onClick={onClick}
-        >
-            {children}
-        </div>
-    );
+export const Square = ({
+  square: _square,
+  isSelected,
+  isLight,
+  onClick,
+  children,
+  isLegal,
+}: SquareProps) => {
+  return (
+    <div
+      data-testid="square"
+      data-selected={isSelected}
+      className={`${styles.baseSquareStyle} ${styles.squareColorVariants[isLight ? "light" : "dark"]} 
+      ${isSelected ? styles.selectedSquareStyle : isLegal ? styles.legalSquareStyle : ""}`}
+      onClick={onClick}
+    >
+      {children}
+    </div>
+  );
 };
