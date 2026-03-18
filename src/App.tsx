@@ -1,9 +1,9 @@
-import { Board } from './features/game/components/Board/Board';
+import { Game } from "./features/game/Game";
 
 const App = () => {
   return (
     <div>
-      <Board />
+      <Game />
     </div>
   );
 };
